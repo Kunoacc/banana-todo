@@ -16,5 +16,6 @@ const svgDataUri = computed(() => {
 </script>
 
 <template>
-  <div :style="{backgroundImage: svgDataUri}"></div>
+  <div :style="{backgroundImage: svgDataUri}" class="transition-all duration-500 ease-in-out bg-cover bg-no-repeat"></div>
+
 </template>

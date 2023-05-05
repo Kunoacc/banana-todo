@@ -31,11 +31,11 @@ const handleThemeChange = (index: number) => {
         enter-to-class="transform opacity-100 scale-100" leave-active-class="transition ease-in duration-75"
         leave-from-class="transform opacity-100 scale-100" leave-to-class="transform opacity-0 scale-95">
         <MenuItems
-          class="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+          class="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white bg-opacity-70 backdrop-blur-lg shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
           <div class="p-6 grid grid-cols-3 gap-6">
             <MenuItem v-for="(palette, index) in appState.colorPalettes" :key="index"
               @click="handleThemeChange(index)">
-              <a href="#" class="w-12 h-12 rounded-lg border-gray-600 border flex items-center justify-center" :style="{ backgroundColor: palette.primary }">
+              <a href="#" class="w-12 h-12 rounded-lg border-gray-400 border flex items-center justify-center" :style="{ backgroundColor: palette.primary }">
                 <div v-if="palette.primary === appState.activePalette?.primary" class="w-8 h-8 rounded items-center justify-center flex bg-black/30">
                   <CheckCircleIcon class="w-4 h-4" />
                 </div>
