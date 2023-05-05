@@ -1,0 +1,1 @@
+export const DARKEN_PERCENTAGE_VALUE = 4.5;
