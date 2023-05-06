@@ -1,5 +1,6 @@
 import { NuxtAuthHandler } from '#auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
+import { decode } from 'next-auth/jwt'
 import { EXTERNAL_RESOURCE_BASE_URL } from '~/constants'
 import { User } from '~/interfaces/user.interface'
 
@@ -35,13 +36,17 @@ export default NuxtAuthHandler({
   callbacks: {
     jwt({ token, user }) {
       if (!token.accessToken) token.accessToken = (user as unknown as User)?.token;
+      if (!token.data && user) token.data = user;
       return token;
     },
-    session({ session, token, user }) {
-      if (!session?.user) session.user = user;
+    async session({ session, token }) {
+      if (token?.data) session.user = token?.data as User;
       // @ts-ignore
       if (!session?.token) session.token = token?.accessToken;
       return session;
     }
+  },
+  pages: {
+    signIn: '/login'
   }
 })

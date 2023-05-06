@@ -37,7 +37,7 @@ export const useAppStore = defineStore('app', () => {
     }
   ])
 
-  const activePalette = ref(colorPalettes.value[0] as (typeof colorPalettes.value)[number] | null);
+  const activePalette = ref(colorPalettes.value[0] as (typeof colorPalettes.value)[number]);
 
   const setActivePalette = (paletteIndex: number) => {
     const palette = colorPalettes.value[paletteIndex];

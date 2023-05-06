@@ -1,5 +1,6 @@
-import { Todo } from "~/interfaces/todo.interface";
+import { Todo, TodoListFilters } from "~/interfaces/todo.interface";
 import { createLoadableStore } from "./utils/createLoadableStore";
+import { User } from "~/interfaces/user.interface";
 
 const storeFactory = (context: ReturnType<ReturnType<typeof createLoadableStore>>) => {
   const { $api } = useNuxtApp()
@@ -8,17 +9,24 @@ const storeFactory = (context: ReturnType<ReturnType<typeof createLoadableStore>
   const todoItems = ref<Todo[]>([])
   const selectedTodoItem = ref<Todo | null>(null)
 
-  async function fetchUserTodoItems(filters: Record<string, string>) {
+  function setActiveTodoItem(todoIndex: number) {
+    selectedTodoItem.value = todoItems.value[todoIndex]
+  }
+
+  async function fetchUserTodoItems(filters: TodoListFilters) {
     await context.withLoading(async () => {
-      // @ts-ignore
-      const response = await $api.todo.getAll(data.value?.user?.id || '0', filters)
+      const response = await $api.todo.getAll((data.value?.user as User)?.id || '0', filters)
       todoItems.value = response.parsedBody?.data?.todos as Todo[]
     })
   }
 
-  async function createTodoItem(todo: Todo) {
+  async function createTodoItem(todo: string) {
     await context.withLoading(async () => {
-      const response = await $api.todo.create(todo)
+      const response = await $api.todo.create({
+        todo,
+        userId: (data.value?.user as User)?.id as string || '0',
+        completed: false
+      })
       todoItems.value.push(response.parsedBody as Todo)
     })
   }
@@ -45,7 +53,8 @@ const storeFactory = (context: ReturnType<ReturnType<typeof createLoadableStore>
     fetchUserTodoItems,
     createTodoItem,
     updateTodoItem,
-    deleteTodoItem
+    deleteTodoItem,
+    setActiveTodoItem
   }
 }
 

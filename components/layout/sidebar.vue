@@ -1,5 +1,9 @@
 <script setup lang="ts">
 import { MagnifyingGlassCircleIcon, QueueListIcon, PlusCircleIcon } from '@heroicons/vue/20/solid'
+import { User } from '~/interfaces/user.interface';
+const { data } = useAuth()
+const user = data.value?.user as User
+console.log(user)
 </script>
 
 <template>
@@ -7,10 +11,10 @@ import { MagnifyingGlassCircleIcon, QueueListIcon, PlusCircleIcon } from '@heroi
     class="w-[250px] bg-black bg-opacity-50 backdrop-blur-lg rounded-r-lg h-full absolute py-5 flex flex-col space-y-4">
     <!-- User Avatar Dropdown -->
     <div class="flex flex-row space-x-4 px-5">
-      <img src="https://api.multiavatar.com/Nelson Atuonwu.png" class="h-12 w-12 rounded-full" alt="" />
+      <img :src=" user?.image || `https://api.multiavatar.com/${user?.firstName}.png`" class="h-12 w-12 rounded-full" alt="" />
       <div class="flex flex-col">
-        <p>Nelson Atuonwu</p>
-        <p class="text-gray-300 text-xs">nellyatuonwu@gmail.com</p>
+        <p>{{ user?.firstName }} {{ user?.lastName }}</p>
+        <p class="text-gray-300 text-xs">{{ user?.email }}</p>
       </div>
     </div>
 

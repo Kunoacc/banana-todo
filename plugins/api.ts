@@ -14,7 +14,7 @@ export default defineNuxtPlugin((nuxtApp) => {
         break;
       case 'unauthenticated':
         token.value = null;
-        signOut();
+        // signOut();
         break;
       case 'loading':
         break;
@@ -24,7 +24,7 @@ export default defineNuxtPlugin((nuxtApp) => {
 
     if (Date.now() > Date.parse(data.value?.expires as string)) {
       token.value = null;
-      signOut();
+      // signOut();
     }
   })
 

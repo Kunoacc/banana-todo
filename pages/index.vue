@@ -1,14 +1,19 @@
 <script lang="ts" setup>
-import { MagnifyingGlassCircleIcon, QueueListIcon, PlusCircleIcon, ChevronDownIcon, PlusIcon } from '@heroicons/vue/20/solid'
+import { useAppStore } from '~/stores/app';
+
+definePageMeta({
+  middleware: 'auth',
+})
+
+const app = useAppStore()
 </script>
 
 <template>
+  <SharedBg class="z-0 absolute inset-0 opacity-75" :active-theme="app.activePalette"/>
   <div class="flex flex-grow w-full h-full flex-row absolute">
-
     <Head>
       <Title>Todo</Title>
     </Head>
-
     <LayoutSidebar/>
 
     <main class="px-10 py-10 h-full left-0 flex-grow ml-[250px]">
@@ -26,17 +31,7 @@ import { MagnifyingGlassCircleIcon, QueueListIcon, PlusCircleIcon, ChevronDownIc
         </div>
       </div>
 
-      <!-- Footer -->
-      <footer class="fixed bottom-10 left-[290px] right-10">
-        <div class="flex rounded-md shadow-sm bg-gray-900/50 space-x-2 py-1.5">
-          <button class="flex select-none items-center pl-3 text-gray-300 sm:text-sm">
-            <PlusIcon class="h-5 w-5" aria-hidden="true" />
-          </button>
-          <input type="text" name="username" id="username" autocomplete="username"
-            class="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-white placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
-            placeholder="Add new task" />
-        </div>
-      </footer>
+      <TodoAdd/>
     </main>
   </div>
 </template>
