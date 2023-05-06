@@ -29,8 +29,6 @@ const handleSubmit = async (e: Event) => {
     redirect: false,
   })
 
-  console.log(session)
-
   if (session) {
     $toast.success('Login sucessful')
     router.replace('/')
@@ -39,8 +37,10 @@ const handleSubmit = async (e: Event) => {
 </script>
 
 <template>
+  <SharedBg class="z-0 absolute inset-0 opacity-75"/>
   <div class="w-full h-screen bg-gradient-to-br from-primary to-primary-light flex items-center justify-center">
       <div class="bg-white p-8 rounded-lg w-full sm:w-[400px] bg-opacity-70 backdrop-blur-lg">
+        <img src="/logo.svg" alt="" srcset="" class="h-20 mx-auto">
         <h1 class="text-2xl font-bold mb-6 text-center text-gray-700 ">Banana Todo</h1>
         <form @submit.prevent="handleSubmit" class="text-black">
           <div class="mb-4">

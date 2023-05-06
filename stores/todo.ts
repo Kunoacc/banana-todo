@@ -8,15 +8,25 @@ const storeFactory = (context: ReturnType<ReturnType<typeof createLoadableStore>
 
   const todoItems = ref<Todo[]>([])
   const selectedTodoItem = ref<Todo | null>(null)
+  const totalItems = ref(0)
 
   function setActiveTodoItem(todoIndex: number) {
     selectedTodoItem.value = todoItems.value[todoIndex]
   }
 
-  async function fetchUserTodoItems(filters: TodoListFilters) {
+  function resetTodoItems() {
+    todoItems.value = []
+  }
+
+  async function fetchUserTodoItems(filters: TodoListFilters = {}) {
     await context.withLoading(async () => {
       const response = await $api.todo.getAll((data.value?.user as User)?.id || '0', filters)
-      todoItems.value = response.parsedBody?.data?.todos as Todo[]
+      const orderedTodoItems = [
+        ...(todoItems.value || []),
+        ...(response.parsedBody?.todos as Todo[])
+      ].sort((a, b) => (b?.id as number) - (a?.id as number))
+      todoItems.value = orderedTodoItems
+      totalItems.value = response.parsedBody?.total as number
     })
   }
 
@@ -54,7 +64,8 @@ const storeFactory = (context: ReturnType<ReturnType<typeof createLoadableStore>
     createTodoItem,
     updateTodoItem,
     deleteTodoItem,
-    setActiveTodoItem
+    setActiveTodoItem,
+    resetTodoItems
   }
 }
 

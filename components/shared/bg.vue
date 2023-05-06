@@ -1,15 +1,20 @@
 <script lang="ts" setup>
 import { darkenColor } from '~/helpers/darkenColor';
 import { generateBgSvg } from '~/helpers/generateBgSvg';
+import { useAppStore } from '~/stores/app';
 
 const props = defineProps<{
-  activeTheme: Record<string, string>
+  activeTheme?: Record<string, string>
 }>()
 
-const darkerColor = computed(() => darkenColor(props.activeTheme.primary))
+const { colorPalettes } = useAppStore()
+
+const activeTheme = computed(() => props.activeTheme ?? colorPalettes[0])
+
+const darkerColor = computed(() => darkenColor(activeTheme.value.primary))
 
 const svgDataUri = computed(() => {
-  const svgContent = generateBgSvg(props.activeTheme.primary, darkerColor.value);
+  const svgContent = generateBgSvg(activeTheme.value.primary, darkerColor.value);
   return `url("data:image/svg+xml,${encodeURIComponent(svgContent)}")`
 })
 

@@ -1,9 +1,14 @@
 <script setup lang="ts">
 import { MagnifyingGlassCircleIcon, QueueListIcon, PlusCircleIcon } from '@heroicons/vue/20/solid'
 import { User } from '~/interfaces/user.interface';
-const { data } = useAuth()
-const user = data.value?.user as User
-console.log(user)
+
+const props = defineProps<{
+  user: User,
+  todoLists?: Record<string, string>
+}>()
+
+const { user } = toRefs(props)
+
 </script>
 
 <template>

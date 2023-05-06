@@ -1,8 +1,15 @@
 import { ApiResponsePlural } from "./api/response.interface";
 
 export interface Todo {
-  id?: number | string;
+  id: number | string;
   todo: string;
+  completed?: boolean;
+  userId?: number | string;
+}
+
+export interface PartialTodo {
+  id?: number | string;
+  todo?: string;
   completed?: boolean;
   userId?: number | string;
 }
@@ -13,4 +20,4 @@ export interface TodoListFilters {
   skip?: number;
 }
 
-export interface TodoList extends ApiResponsePlural<{todos: Todo[]}> {}
+export interface TodoList extends ApiResponsePlural<'todos', Todo[]> {}
