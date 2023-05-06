@@ -14,10 +14,17 @@ export interface PartialTodo {
   userId?: number | string;
 }
 
-export interface TodoListFilters {
+export interface TodoFilters {
   limit?: number;
   offset?: number;
   skip?: number;
 }
 
-export interface TodoList extends ApiResponsePlural<'todos', Todo[]> {}
+export interface TodoList {
+  todos: Todo[];
+  id: number | string;
+  name: string;
+  total: number;
+}
+
+export interface Todos extends ApiResponsePlural<'todos', Todo[]> { }

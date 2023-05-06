@@ -4,7 +4,7 @@
  * @returns 
  */
 
-export async function errorLogger<T>(fn: () => Promise<T>) {
+export const errorLogger = async <T>(fn: () => Promise<T>) => {
   try {
     return await fn()
   } catch (error) {

@@ -9,12 +9,15 @@ definePageMeta({
 
 const { data } = useAuth()
 const app = useAppStore()
+
 const todo = useTodoStore()
+const { selectedTodoListIndex, todoLists, selectedTodoList, updateTodoItem } = toRefs(todo)
+
 
 const user = data.value?.user as User
 
 onMounted(() => {
-  todo.fetchUserTodoItems()
+  todo.fetchUserTodoItems(user?.id as string)
 })
 </script>
 
@@ -24,18 +27,25 @@ onMounted(() => {
     <Head>
       <Title>Todo</Title>
     </Head>
-    <LayoutSidebar :user="user"/>
+    <LayoutSidebar 
+      :user="user" 
+      :selected-todo-list="(selectedTodoListIndex as number)" 
+      :todo-lists="todoLists"/>
 
     <main class="px-10 py-10 h-full left-0 flex-grow ml-[250px]">
       <!-- Navbar -->
-      <LayoutHeader />
+      <LayoutHeader :title="selectedTodoList?.name" />
 
       <!-- Main Content -->
       <div class="w-full grid grid-cols-1 gap-y-px mt-10">
-        <TodoItem/>
+        <TodoItem 
+          v-for="(todo, index) in selectedTodoList?.todos || []"
+          :todo="todo"
+          :update-todo="updateTodoItem"
+          />
       </div>
 
-      <TodoAdd/>
+      <TodoAdd :user="user"/>
     </main>
   </div>
 </template>

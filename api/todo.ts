@@ -1,12 +1,12 @@
 import { ClientDelete, ClientGet, ClientPatch, ClientPost } from "~/helpers/http";
-import { PartialTodo, Todo, TodoList, TodoListFilters } from "~/interfaces/todo.interface";
+import { PartialTodo, Todo, Todos, TodoFilters } from "~/interfaces/todo.interface";
 
 export const todo = (get: ClientGet, post: ClientPost, patch: ClientPatch, del: ClientDelete) => ({
-  async getAll(userId: string | number, filters: TodoListFilters) {
-    return await get<TodoList>(`/todos/user/${userId}`, filters);
+  async getAll(userId: string | number, filters: TodoFilters) {
+    return await get<Todos>(`/todos/user/${userId}`, filters);
   },
 
-  async create(todo: PartialTodo) { 
+  async create(todo: PartialTodo) {
     return await post<Todo, PartialTodo>('/todos/add', todo);
   },
 

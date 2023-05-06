@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import { MagnifyingGlassCircleIcon, QueueListIcon, PlusCircleIcon } from '@heroicons/vue/20/solid'
+import { TodoList } from '~/interfaces/todo.interface';
 import { User } from '~/interfaces/user.interface';
 
 const props = defineProps<{
   user: User,
-  todoLists?: Record<string, string>
+  todoLists?: TodoList[],
+  selectedTodoList?: number
 }>()
 
 const { user } = toRefs(props)
@@ -39,28 +41,15 @@ const { user } = toRefs(props)
     <!-- To do Lists-->
     <div class="flex flex-col space-y-2">
 
-      <div class="flex flex-row justify-between bg-primary bg-opacity-20 px-5 py-1.5">
+      <div :class="[
+        'flex flex-row justify-between bg-opacity-20 px-5 py-1.5',
+        {'bg-primary': index === selectedTodoList}
+        ]" v-for="(todo, index) in todoLists">
         <div class="flex space-x-1 items-center">
           <QueueListIcon class="h-4 w-4" />
-          <p class="text-gray-300">To Do</p>
+          <p class="text-gray-300">{{ todo.name }}</p>
         </div>
-        <p class="text-gray-300">3</p>
-      </div>
-
-      <div class="flex flex-row justify-between px-5 py-1.5">
-        <div class="flex space-x-1 items-center">
-          <QueueListIcon class="h-4 w-4" />
-          <p class="text-gray-300">To Do</p>
-        </div>
-        <p class="text-gray-300">3</p>
-      </div>
-
-      <div class="flex flex-row justify-between px-5 py-1.5">
-        <div class="flex space-x-1 items-center">
-          <QueueListIcon class="h-4 w-4" />
-          <p class="text-gray-300">To Do</p>
-        </div>
-        <p class="text-gray-300">3</p>
+        <p class="text-gray-300">{{ todo.total }}</p>
       </div>
     </div>
 
