@@ -6,7 +6,8 @@ import { User } from '~/interfaces/user.interface';
 const props = defineProps<{
   user: User,
   todoLists?: TodoList[],
-  selectedTodoList?: number
+  selectedTodoList?: number,
+  selectTodoList: (arg: number) => void
 }>()
 
 const { user } = toRefs(props)
@@ -41,16 +42,17 @@ const { user } = toRefs(props)
     <!-- To do Lists-->
     <div class="flex flex-col space-y-2">
 
-      <div :class="[
+      <button @click="selectTodoList(index)" :class="[
         'flex flex-row justify-between bg-opacity-20 px-5 py-1.5',
         {'bg-primary': index === selectedTodoList}
-        ]" v-for="(todo, index) in todoLists">
+        ]" :key="index"
+        v-for="(todo, index) in todoLists">
         <div class="flex space-x-1 items-center">
           <QueueListIcon class="h-4 w-4" />
           <p class="text-gray-300">{{ todo.name }}</p>
         </div>
         <p class="text-gray-300">{{ todo.total }}</p>
-      </div>
+      </button>
     </div>
 
     <!-- New List Button -->

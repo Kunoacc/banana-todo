@@ -24,7 +24,7 @@ export interface TodoList {
   todos: Todo[];
   id: number | string;
   name: string;
-  total: number;
+  total: number | null;
 }
 
 export interface Todos extends ApiResponsePlural<'todos', Todo[]> { }

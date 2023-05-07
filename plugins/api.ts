@@ -22,9 +22,9 @@ export default defineNuxtPlugin((nuxtApp) => {
         break;
     }
 
-    if (Date.now() > Date.parse(data.value?.expires as string)) {
+    if (data.value?.expires && Date.now() > Date.parse(data.value?.expires as string)) {
       token.value = null;
-      // signOut();
+      signOut();
     }
   })
 

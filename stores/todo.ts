@@ -13,8 +13,32 @@ const storeFactory = (context: ReturnType<ReturnType<typeof createLoadableStore>
   const selectedTodoItemIndex = ref<number | null>(null)
   const selectedTodoItem = computed(() => selectedTodoList.value?.todos[selectedTodoItemIndex.value as number])
 
+  function fetchTodoLists() {
+    // TODO: create a way to fetch these from an API and link them to the to-do items
+    todoLists.value = [
+      {
+        id: 1,
+        name: 'Work',
+        todos: [],
+        total: null
+      },
+      {
+        id: 2,
+        name: 'Personal',
+        todos: [],
+        total: null
+      },
+      {
+        id: 3,
+        name: 'Shopping',
+        todos: [],
+        total: null
+      }
+    ]
+  }
+
   function setActiveTodoItem(todoIndex?: number) {
-    selectedTodoItemIndex.value = todoIndex  ?? null
+    selectedTodoItemIndex.value = todoIndex ?? null
   }
 
   function setActiveTodoList(todoListIndex?: number) {
@@ -26,68 +50,34 @@ const storeFactory = (context: ReturnType<ReturnType<typeof createLoadableStore>
   }
 
   async function fetchUserTodoItems(userId: string, filters: TodoFilters = {}) {
-    await context.withLoading(async () => {
-      const response = await $api.todo.getAll(userId, filters)
-      const orderedTodoItems = processTodo([
-        ...(selectedTodoList.value?.todos || []),
-        ...(response.parsedBody?.todos as Todo[])
-      ]);
-      todoLists.value[selectedTodoListIndex.value as number].todos = orderedTodoItems
-      todoLists.value[selectedTodoListIndex.value as number].total = response.parsedBody?.total as number
-    })
-  }
-
-  function fetchTodoLists() {
-    // TODO: create a way to fetch these from an API and link them to the to-do items
-    todoLists.value = [
-      {
-        id: 1,
-        name: 'Work',
-        todos: [],
-        total: 0
-      },
-      {
-        id: 2,
-        name: 'Personal',
-        todos: [],
-        total: 0
-      },
-      {
-        id: 3,
-        name: 'Shopping',
-        todos: [],
-        total: 0
-      }
-    ]
+    const response = await context.withLoading(async () => await $api.todo.getAll(userId, filters))
+    const orderedTodoItems = processTodo([
+      ...(selectedTodoList.value?.todos || []),
+      ...(response.parsedBody?.todos as Todo[])
+    ]);
+    todoLists.value[selectedTodoListIndex.value as number].todos = orderedTodoItems
+    todoLists.value[selectedTodoListIndex.value as number].total = response.parsedBody?.total as number
   }
 
   async function createTodoItem(userId: string, todo: string) {
-    await context.withLoading(async () => {
-      const response = await $api.todo.create({
-        todo,
-        userId,
-        completed: false
-      })
-      todoLists.value[selectedTodoListIndex.value as number].todos.push(response.parsedBody as Todo)
-    })
+    const response = await context.withLoading(async () => await $api.todo.create({
+      todo,
+      userId,
+      completed: false
+    }))
+    todoLists.value[selectedTodoListIndex.value as number].todos.push(response.parsedBody as Todo)
   }
 
   async function updateTodoItem(todo: Todo) {
-    await context.withLoading(async () => {
-      console.log('i got here')
-      const response = await $api.todo.update(todo)
-      
-      const index = todoLists.value[selectedTodoListIndex.value as number].todos.findIndex((item) => item.id === todo.id)
-      todoLists.value[selectedTodoListIndex.value as number].todos[index] = response.parsedBody as Todo
-    })
+    const response = await context.withLoading(async () => await $api.todo.update(todo))
+    const index = todoLists.value[selectedTodoListIndex.value as number].todos.findIndex((item) => item.id === todo.id)
+    todoLists.value[selectedTodoListIndex.value as number].todos[index] = response.parsedBody as Todo
   }
 
   async function deleteTodoItem(todoId: number) {
-    await context.withLoading(async () => {
-      await $api.todo.delete(todoId)
-      const index = todoLists.value[selectedTodoListIndex.value as number].todos.findIndex((item) => item.id === todoId)
-      todoLists.value[selectedTodoListIndex.value as number].todos.splice(index, 1)
-    })
+    await context.withLoading(async () => await $api.todo.delete(todoId))
+    const index = todoLists.value[selectedTodoListIndex.value as number].todos.findIndex((item) => item.id === todoId)
+    todoLists.value[selectedTodoListIndex.value as number].todos.splice(index, 1)
   }
 
   onMounted(() => fetchTodoLists())
